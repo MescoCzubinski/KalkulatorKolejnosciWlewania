@@ -52,8 +52,11 @@ export default function Input({
             id={title}
             autoComplete="off"
             type="text"
-            pattern="[0-9]*"
-            inputMode="numeric"
+            onChange={(e) => {
+              setAfterFristClick(true);
+              setValue(e.target.value);
+            }}
+            value={afterFristClick ? value : ""}
             placeholder={placeholder}
           />
         )}

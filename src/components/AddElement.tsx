@@ -6,25 +6,96 @@ import {
   OptionsBiopreparat,
   OptionsStymulator,
 } from "./data";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function AddElement() {
+export default function AddElement({
+  elements,
+  setElements,
+  isReset,
+}: {
+  elements: {
+    name: string;
+    type: string;
+    subType: string;
+    alert1?: string;
+    alert2?: string;
+    alert3?: string;
+  }[];
+  setElements: (
+    elements: {
+      name: string;
+      type: string;
+      subType: string;
+      alert1?: string;
+      alert2?: string;
+      alert3?: string;
+    }[]
+  ) => void;
+  isReset: boolean;
+}) {
+  const [showWarning, setShowWarning] = useState(false);
   const [elementType, setElementType] = useState("");
+
+  const [elementName, setElementName] = useState("");
   const [elementValue, setElementValue] = useState("");
+  const [alerts, setAlerts] = useState({ alert1: "", alert2: "", alert3: "" });
+
+  useEffect(() => {
+    setShowWarning(false);
+  }, [elementName, elementType, elementValue]);
+
+  useEffect(() => {
+    if (isReset) {
+      setElementName("");
+      setElementType("");
+      setElementValue("");
+      setAlerts({ alert1: "", alert2: "", alert3: "" });
+    }
+  }, [isReset]);
+
+  function mapOptions(elements: { symbol: string; name: string }[]) {
+    return elements.map((element) => ({
+      name: (element.symbol !== "-" ? element.symbol + " " : "") + element.name,
+      value:
+        (element.symbol !== "-" ? element.symbol + " " : "") + element.name,
+    }));
+  }
   return (
-    <div>
+    <div className="border-2 border-[var(--detail-color)] rounded-2xl p-4">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl text-nowrap">Dodaj element</h1>
+        <h1 className="text-2xl text-nowrap font-semibold">Dodaj element</h1>
         <img
           src="/add.svg"
           alt="add element"
           className="w-12 cursor-pointer hover:shadow-[0_5_5px_var(--primary-color)] transition-shadow outline-0"
+          onClick={() => {
+            if (elementName === "" || elementValue === "") {
+              setShowWarning(true);
+              return;
+            }
+            setShowWarning(false);
+            setElementName("");
+            setElementType("");
+            setElementValue("");
+            setAlerts({ alert1: "", alert2: "", alert3: "" });
+            setElements([
+              ...elements,
+              {
+                name: elementName,
+                type: elementType,
+                subType: elementValue,
+                alert1: "",
+                alert2: "",
+                alert3: "",
+              },
+            ]);
+          }}
         />
       </div>
       <Input
-        number
-        value={""}
-        setValue={() => {}}
+        text
+        value={elementName}
+        setValue={setElementName}
         title="Nazwa środka"
         placeholder="Podaj nazwę środka"
       />
@@ -32,29 +103,24 @@ export default function AddElement() {
         select
         value={elementType}
         setValue={setElementType}
-        title="Rodzaj środka"
-        placeholder="Wybierz rodzaj środka"
+        title="Rodzaj składnika"
+        placeholder="Wybierz składnik"
         options={[
-          { name: "ś.o.r.", value: "s_o_r" },
+          { name: "ś.o.r.", value: "ś.o.r." },
           { name: "adiuwant", value: "adiuwant" },
-          { name: "nawóz", value: "nawoz" },
+          { name: "nawóz", value: "nawóz" },
           { name: "biopreparat", value: "biopreparat" },
-          { name: "stymulator mineralny", value: "stymulator" },
+          { name: "stymulator mineralny", value: "stymulator mineralny" },
         ]}
       />
-      {elementType === "s_o_r" && (
+      {elementType === "ś.o.r." && (
         <Input
           select
           value={elementValue}
           setValue={setElementValue}
-          title="Rodzaj środka"
+          title="Formulacja środka"
           placeholder="Wybierz ś.o.r."
-          options={OptionsSOR.map((element) => ({
-            name:
-              (element.symbol !== "-" ? element.symbol + " " : "") +
-              element.name,
-            value: element.value,
-          }))}
+          options={mapOptions(OptionsSOR)}
         />
       )}
       {elementType === "adiuwant" && (
@@ -62,29 +128,19 @@ export default function AddElement() {
           select
           value={elementValue}
           setValue={setElementValue}
-          title="Rodzaj adiuwantu"
+          title="Formulacja adiuwantu"
           placeholder="Wybierz adiuwant"
-          options={OptionsAdiuwant.map((element) => ({
-            name:
-              (element.symbol !== "-" ? element.symbol + " " : "") +
-              element.name,
-            value: element.value,
-          }))}
+          options={mapOptions(OptionsAdiuwant)}
         />
       )}
-      {elementType === "nawoz" && (
+      {elementType === "nawóz" && (
         <Input
           select
           value={elementValue}
           setValue={setElementValue}
-          title="Rodzaj nawozu"
+          title="Formulacja nawozu"
           placeholder="Wybierz nawóz"
-          options={OptionsNawoz.map((element) => ({
-            name:
-              (element.symbol !== "-" ? element.symbol + " " : "") +
-              element.name,
-            value: element.value,
-          }))}
+          options={mapOptions(OptionsNawoz)}
         />
       )}
       {elementType === "biopreparat" && (
@@ -92,30 +148,34 @@ export default function AddElement() {
           select
           value={elementValue}
           setValue={setElementValue}
-          title="Rodzaj biopreparatu"
+          title="Formulacja biopreparatu"
           placeholder="Wybierz biopreparat"
-          options={OptionsBiopreparat.map((element) => ({
-            name:
-              (element.symbol !== "-" ? element.symbol + " " : "") +
-              element.name,
-            value: element.value,
-          }))}
+          options={mapOptions(OptionsBiopreparat)}
         />
       )}
-      {elementType === "stymulator" && (
+      {elementType === "stymulator mineralny" && (
         <Input
           select
           value={elementValue}
           setValue={setElementValue}
-          title="Rodzaj stymulatora"
+          title="Formulacja stymulatora"
           placeholder="Wybierz stymulator"
-          options={OptionsStymulator.map((element) => ({
-            name:
-              (element.symbol !== "-" ? element.symbol + " " : "") +
-              element.name,
-            value: element.value,
-          }))}
+          options={mapOptions(OptionsStymulator)}
         />
+      )}
+      {alerts.alert1 && (
+        <p className="text-xl text-center text-red-500">{alerts.alert1}</p>
+      )}
+      {alerts.alert2 && (
+        <p className="text-xl text-center text-red-500">{alerts.alert2}</p>
+      )}
+      {alerts.alert3 && (
+        <p className="text-xl text-center text-red-500">{alerts.alert3}</p>
+      )}
+      {showWarning && (
+        <p className="text-xl text-center text-red-500">
+          Wypełnij wszystkie pola
+        </p>
       )}
     </div>
   );

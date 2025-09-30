@@ -2,102 +2,86 @@ export const OptionsSOR = [
   {
     symbol: "WP",
     name: "proszek do sporządzania zawiesiny",
-    value: "proszek_do_sporzadzania_zawiesiny",
   },
   {
     symbol: "WG",
     name: "granulat do sporządzania zawiesiny",
-    value: "granulat_do_sporzadzania_zawiesiny",
   },
   {
     symbol: "SC",
     name: "koncentrat do sporządzania zawiesiny",
-    value: "koncentrat_do_sporzadzania_zawiesiny",
   },
   {
     symbol: "CS",
     name: "zawiesina kapsuł",
-    value: "zawiesina_kapsul",
+    alert1: "skonsultuj z doradcą producenta środka",
   },
   {
     symbol: "ZC",
     name: "mieszanina CS i SC",
-    value: "mieszanina_cs_i_sc",
+    alert1: "skonsultuj z doradcą producenta środka",
   },
   {
     symbol: "EC",
     name: "koncentrat do sporządzania emulsji",
-    value: "koncentrat_do_sporzadzania_emulsji",
   },
   {
     symbol: "EW",
     name: "emulsja olej w wodzie",
-    value: "emulsja_olej_w_wodzie",
   },
   {
     symbol: "EO",
     name: "emulsja woda w oleju",
-    value: "emulsja_woda_w_oleju",
   },
   {
     symbol: "EG",
     name: "granulat do sporządzania emulsji",
-    value: "granulat_do_sporzadzania_emulsji",
   },
   {
     symbol: "SE",
     name: "zawiesionoemulsja",
-    value: "zawiesionoemulsja",
   },
   {
     symbol: "GW",
     name: "żel do sporządzania emulsji",
-    value: "zel_do_sporzadzania_emulsji",
   },
   {
     symbol: "GL",
     name: "żel do sporządzania emulsji",
-    value: "zel_do_sporzadzania_emulsji",
   },
   {
     symbol: "ME",
     name: "mikroemulsja",
-    value: "mikroemulsja",
   },
   {
     symbol: "ZE",
     name: "mieszanina CS i SE",
-    value: "mieszanina_cs_i_se",
+    alert1: "skonsultuj z doradcą producenta środka",
   },
   {
     symbol: "ZW",
     name: "mieszanina CS i EW",
-    value: "mieszanina_cs_i_ew",
+    alert1: "skonsultuj z doradcą producenta środka",
   },
   {
     symbol: "OF",
     name: "koncentrat zawiesinowy olejowy",
-    value: "koncentrat_zawiesinowy_olejowy",
   },
   {
     symbol: "OD",
     name: "zawiesina olejowa",
-    value: "zawiesina_olejowa",
   },
   {
     symbol: "SL",
     name: "koncentrat rozpuszczalny",
-    value: "koncentrat_rozpuszczalny",
   },
   {
     symbol: "SP",
     name: "proszek rozpuszczalny",
-    value: "proszek_rozpuszczalny",
   },
   {
     symbol: "SG",
     name: "granulat rozpuszczalny",
-    value: "granulat_rozpuszczalny",
   },
 ];
 
@@ -105,22 +89,23 @@ export const OptionsNawoz = [
   {
     symbol: "G",
     name: "mocznik",
-    value: "mocznik",
   },
   {
     symbol: "-",
     name: "proszek/granulat",
-    value: "proszek_granulat",
+    alert1: "nie łącz nawozów Ca i Mg",
+    alert2: "nie łącz siarczanów z fosforem",
   },
   {
     symbol: "-",
     name: "r.s.m.",
-    value: "r_s_m",
   },
   {
     symbol: "-",
     name: "płyn",
-    value: "plyn",
+    alert1: "nie łącz siarczanu miedzi z herbicydami",
+    alert2: "nie łącz siarczanów z fosforem",
+    alert3: "ostrożnie łącz żelazo z herbicydami",
   },
 ];
 
@@ -128,27 +113,22 @@ export const OptionsAdiuwant = [
   {
     symbol: "-",
     name: "kondycjoner wody",
-    value: "kondycjoner_wody",
   },
   {
     symbol: "-",
     name: "olejowy",
-    value: "olejowy",
   },
   {
     symbol: "-",
     name: "surfaktant",
-    value: "surfaktant",
   },
   {
     symbol: "-",
     name: "inny poprawiające przyczepność",
-    value: "inny_poprawiajace_przyczepnosc",
   },
   {
     symbol: "-",
     name: "zmniejszający pianę",
-    value: "zmniejszajacy_piane",
   },
 ];
 
@@ -156,12 +136,12 @@ export const OptionsBiopreparat = [
   {
     symbol: "-",
     name: "płyn",
-    value: "plyn",
+    alert1: "skonsultuj z doradcą producenta środka",
   },
   {
     symbol: "-",
     name: "proszek",
-    value: "proszek",
+    alert1: "skonsultuj z doradcą producenta środka",
   },
 ];
 
@@ -169,6 +149,44 @@ export const OptionsStymulator = [
   {
     symbol: "-",
     name: "płyn/proszek",
-    value: "plyn_proszek",
   },
+];
+
+export const order = [
+  { symbol: "-", type: "adiuwant", subType: "kondycjoner wody" },
+  { symbol: "G", type: "nawóz", name: "mocznik" },
+  { symbol: "-", type: "nawóz", name: "proszek/granulat" },
+  { symbol: "WP", type: "ś.o.r.", name: "proszek do sporządzania zawiesiny" },
+  { symbol: "WG", type: "ś.o.r.", name: "granulat do sporządzania zawiesiny" },
+  {
+    symbol: "SC",
+    type: "ś.o.r.",
+    name: "koncentrat do sporządzania zawiesiny",
+  },
+  { symbol: "CS", type: "ś.o.r.", name: "zawiesina kapsuł" },
+  { symbol: "ZC", type: "ś.o.r.", name: "mieszanina CS i SC" },
+  { symbol: "EC", type: "ś.o.r.", name: "koncentrat do sporządzania emulsji" },
+  { symbol: "EW", type: "ś.o.r.", name: "emulsja olej w wodzie" },
+  { symbol: "EO", type: "ś.o.r.", name: "emulsja woda w oleju" },
+  { symbol: "EG", type: "ś.o.r.", name: "granulat do sporządzania emulsji" },
+  { symbol: "SE", type: "ś.o.r.", name: "zawiesionoemulsja" },
+  { symbol: "GW", type: "ś.o.r.", name: "żel do sporządzania emulsji" },
+  { symbol: "GL", type: "ś.o.r.", name: "żel do sporządzania emulsji" },
+  { symbol: "ME", type: "ś.o.r.", name: "mikroemulsja" },
+  { symbol: "ZE", type: "ś.o.r.", name: "mieszanina CS i SE" },
+  { symbol: "ZW", type: "ś.o.r.", name: "mieszanina CS i EW" },
+  { symbol: "OF", type: "ś.o.r.", name: "koncentrat zawiesinowy olejowy" },
+  { symbol: "OD", type: "ś.o.r.", name: "zawiesina olejowa" },
+  { symbol: "SL", type: "ś.o.r.", name: "koncentrat rozpuszczalny" },
+  { symbol: "SP", type: "ś.o.r.", name: "proszek rozpuszczalny" },
+  { symbol: "SG", type: "ś.o.r.", name: "granulat rozpuszczalny" },
+  { symbol: "-", type: "nawóz", name: "r.s.m." },
+  { symbol: "-", type: "nawóz", name: "płyn" },
+  { symbol: "-", type: "stymulator mineralny", name: "płyn/proszek" },
+  { symbol: "-", type: "adiuwant", name: "olejowy" },
+  { symbol: "-", type: "adiuwant", name: "surfaktant" },
+  { symbol: "-", type: "adiuwant", name: "inny poprawiające przyczepność" },
+  { symbol: "-", type: "adiuwant", name: "zmniejszający pianę" },
+  { symbol: "-", type: "biopreparat", name: "płyn" },
+  { symbol: "-", type: "biopreparat", name: "proszek" },
 ];
