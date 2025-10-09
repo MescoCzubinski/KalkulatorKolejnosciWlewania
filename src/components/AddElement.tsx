@@ -1,4 +1,6 @@
 import Input from "./Input";
+import AddIcon from "../assets/add.svg";
+
 import {
   OptionsSOR,
   OptionsNawoz,
@@ -12,33 +14,28 @@ export default function AddElement({
   elements,
   setElements,
   isReset,
+  setHasSorted,
 }: {
   elements: {
     name: string;
     type: string;
     subType: string;
-    alert1?: string;
-    alert2?: string;
-    alert3?: string;
   }[];
   setElements: (
     elements: {
       name: string;
       type: string;
       subType: string;
-      alert1?: string;
-      alert2?: string;
-      alert3?: string;
     }[]
   ) => void;
   isReset: boolean;
+  setHasSorted: (hasSorted: boolean) => void;
 }) {
   const [showWarning, setShowWarning] = useState(false);
   const [elementType, setElementType] = useState("");
 
   const [elementName, setElementName] = useState("");
   const [elementValue, setElementValue] = useState("");
-  const [alerts, setAlerts] = useState({ alert1: "", alert2: "", alert3: "" });
 
   useEffect(() => {
     setShowWarning(false);
@@ -49,7 +46,6 @@ export default function AddElement({
       setElementName("");
       setElementType("");
       setElementValue("");
-      setAlerts({ alert1: "", alert2: "", alert3: "" });
     }
   }, [isReset]);
 
@@ -65,10 +61,11 @@ export default function AddElement({
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl text-nowrap font-semibold">Dodaj element</h1>
         <img
-          src="/add.svg"
+          src={AddIcon}
           alt="add element"
           className="w-12 cursor-pointer hover:shadow-[0_5_5px_var(--primary-color)] transition-shadow outline-0"
           onClick={() => {
+            setHasSorted(false);
             if (elementName === "" || elementValue === "") {
               setShowWarning(true);
               return;
@@ -77,16 +74,12 @@ export default function AddElement({
             setElementName("");
             setElementType("");
             setElementValue("");
-            setAlerts({ alert1: "", alert2: "", alert3: "" });
             setElements([
-              ...elements,
+              ...elements.filter((el) => el.name !== "H₂O - woda"),
               {
                 name: elementName,
                 type: elementType,
                 subType: elementValue,
-                alert1: "",
-                alert2: "",
-                alert3: "",
               },
             ]);
           }}
@@ -162,15 +155,6 @@ export default function AddElement({
           placeholder="Wybierz stymulator"
           options={mapOptions(OptionsStymulator)}
         />
-      )}
-      {alerts.alert1 && (
-        <p className="text-xl text-center text-red-500">{alerts.alert1}</p>
-      )}
-      {alerts.alert2 && (
-        <p className="text-xl text-center text-red-500">{alerts.alert2}</p>
-      )}
-      {alerts.alert3 && (
-        <p className="text-xl text-center text-red-500">{alerts.alert3}</p>
       )}
       {showWarning && (
         <p className="text-xl text-center text-red-500">

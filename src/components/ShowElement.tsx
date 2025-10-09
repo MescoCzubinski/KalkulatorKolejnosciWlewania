@@ -1,9 +1,10 @@
-import { useState } from "react";
+import deleteIcon from "../assets/delete.svg";
 
 export default function ShowElement({
   element,
   elements,
   setElements,
+  index,
 }: {
   element: {
     name: string;
@@ -12,6 +13,7 @@ export default function ShowElement({
     alert1?: string;
     alert2?: string;
     alert3?: string;
+    alert4?: string;
   };
   elements: {
     name: string;
@@ -20,6 +22,7 @@ export default function ShowElement({
     alert1?: string;
     alert2?: string;
     alert3?: string;
+    alert4?: string;
   }[];
   setElements: (
     elements: {
@@ -29,20 +32,36 @@ export default function ShowElement({
       alert1?: string;
       alert2?: string;
       alert3?: string;
+      alert4?: string;
     }[]
   ) => void;
+  index?: number;
 }) {
-  const [showAlerts] = useState(false);
-
-  const hasAlerts = element.alert1 || element.alert2 || element.alert3;
-
+  function alertColor(alert: string) {
+    if (
+      alert === "najlepiej ogrzana" ||
+      alert === "nie łącz nawozów Ca i Mg" ||
+      alert === "skonsultuj z doradcą producenta środka" ||
+      alert === "ostrożnie łącz żelazo z herbicydami" ||
+      alert === "nie łącz siarczanu miedzi z herbicydami" ||
+      alert === "nie mieszaj manganu z regulatorami wzrostu" ||
+      alert ===
+        "nie mieszać z herbicydami typu -fop -den -dym oraz insektycydami EC" ||
+      alert ===
+        "herbicydów typu -fop -den -dym, insektycydów EC oraz granulatów rozpuszczalnych SG nie mieszać z r.s.m."
+    ) {
+      return "text-yellow-500";
+    }
+    return "text-red-500";
+  }
   return (
     <div className="flex flex-col gap-y-2 w-full p-4 border-2 border-[var(--primary-color)] rounded-2xl">
       <div className="flex w-full items-center justify-between gap-2">
         <div className="flex items-center justify-between w-full gap-2">
+          {index !== 0 && <p className="text-2xl font-semibold">{index}.</p>}
           <p className="text-2xl font-semibold">{element.name}</p>
           <img
-            src="/delete.svg"
+            src={deleteIcon}
             alt="delete"
             className="w-12 cursor-pointer hover:shadow-[0_5_5px_var(--primary-color)] transition-shadow outline-0"
             onClick={() =>
@@ -55,21 +74,25 @@ export default function ShowElement({
         <span className="font-semibold">{element.type}</span> {element.subType}
       </p>
 
-      {showAlerts && hasAlerts && (
-        <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <h3 className="font-semibold text-yellow-800 mb-2">Uwagi:</h3>
-          <ul className="space-y-1">
-            {element.alert1 && (
-              <li className="text-yellow-700">• {element.alert1}</li>
-            )}
-            {element.alert2 && (
-              <li className="text-yellow-700">• {element.alert2}</li>
-            )}
-            {element.alert3 && (
-              <li className="text-yellow-700">• {element.alert3}</li>
-            )}
-          </ul>
-        </div>
+      {element.alert1 && (
+        <p className={`text-xl text-center ${alertColor(element.alert1)}`}>
+          {element.alert1}
+        </p>
+      )}
+      {element.alert2 && (
+        <p className={`text-xl text-center ${alertColor(element.alert2)}`}>
+          {element.alert2}
+        </p>
+      )}
+      {element.alert3 && (
+        <p className={`text-xl text-center ${alertColor(element.alert3)}`}>
+          {element.alert3}
+        </p>
+      )}
+      {element.alert4 && (
+        <p className={`text-xl text-center ${alertColor(element.alert4)}`}>
+          {element.alert4}
+        </p>
       )}
     </div>
   );
