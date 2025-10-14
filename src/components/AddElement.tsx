@@ -1,6 +1,11 @@
 import Input from "./Input";
 import AddIcon from "../assets/add.svg";
 
+import type {
+  Element as ElementType,
+  SetElements as SetElementsType,
+} from "../types/types.ts";
+
 import {
   OptionsSOR,
   OptionsNawoz,
@@ -16,45 +21,106 @@ export default function AddElement({
   isReset,
   setHasSorted,
 }: {
-  elements: {
-    name: string;
-    type: string;
-    subType: string;
-  }[];
-  setElements: (
-    elements: {
-      name: string;
-      type: string;
-      subType: string;
-    }[]
-  ) => void;
+  elements: ElementType[];
+  setElements: SetElementsType;
   isReset: boolean;
   setHasSorted: (hasSorted: boolean) => void;
 }) {
-  const [showWarning, setShowWarning] = useState(false);
+  const [elementTitle, setElementTitle] = useState("");
   const [elementType, setElementType] = useState("");
+  const [showWarning, setShowWarning] = useState(false);
 
-  const [elementName, setElementName] = useState("");
   const [elementValue, setElementValue] = useState("");
 
   useEffect(() => {
-    setShowWarning(false);
-  }, [elementName, elementType, elementValue]);
-
-  useEffect(() => {
     if (isReset) {
-      setElementName("");
+      setElementTitle("");
       setElementType("");
       setElementValue("");
+      setShowWarning(false);
     }
   }, [isReset]);
 
-  function mapOptions(elements: { symbol: string; name: string }[]) {
+  function getAlerts(elementName: string, elementType: string) {
+    const emptyElement: ElementType = {
+      name: "",
+      type: "",
+      alert1: "",
+      alert2: "",
+      alert3: "",
+      alert4: "",
+      alert5: "",
+    };
+    let elements: ElementType = { ...emptyElement };
+
+    switch (elementType) {
+      case "ś.o.r.":
+        elements =
+          OptionsSOR.find((el) => el.name === elementName) ?? emptyElement;
+        break;
+      case "adiuwant":
+        elements =
+          OptionsAdiuwant.find((el) => el.name === elementName) ?? emptyElement;
+        break;
+      case "nawóz":
+        elements =
+          OptionsNawoz.find((el) => el.name === elementName) ?? emptyElement;
+        break;
+      case "biopreparat":
+        elements =
+          OptionsBiopreparat.find((el) => el.name === elementName) ??
+          emptyElement;
+        break;
+      case "stymulator mineralny":
+        elements =
+          OptionsStymulator.find((el) => el.name === elementName) ??
+          emptyElement;
+        break;
+    }
+
+    return {
+      alert1: elements.alert1,
+      alert2: elements.alert2,
+      alert3: elements.alert3,
+      alert4: elements.alert4,
+      alert5: elements.alert5,
+    };
+  }
+
+  function mapOptions(elements: ElementType[]) {
     return elements.map((element) => ({
-      name: (element.symbol !== "-" ? element.symbol + " " : "") + element.name,
-      value:
-        (element.symbol !== "-" ? element.symbol + " " : "") + element.name,
+      name: element.name,
+      value: element.name,
     }));
+  }
+
+  function addElement() {
+    setHasSorted(false);
+
+    if (elementTitle === "" || elementType === "" || elementValue === "") {
+      setShowWarning(true);
+      return;
+    }
+
+    const alerts = getAlerts(elementValue, elementType);
+
+    setElements([
+      ...elements.filter((el) => el.title !== "H₂O - woda"),
+      {
+        title: elementTitle,
+        name: elementValue,
+        type: elementType,
+        alert1: alerts.alert1,
+        alert2: alerts.alert2,
+        alert3: alerts.alert3,
+        alert4: alerts.alert4,
+        alert5: alerts.alert5,
+      },
+    ]);
+    setElementTitle("");
+    setElementType("");
+    setElementValue("");
+    setShowWarning(false);
   }
   return (
     <div className="border-2 border-[var(--detail-color)] rounded-2xl p-4">
@@ -64,31 +130,13 @@ export default function AddElement({
           src={AddIcon}
           alt="add element"
           className="w-12 cursor-pointer hover:shadow-[0_5_5px_var(--primary-color)] transition-shadow outline-0"
-          onClick={() => {
-            setHasSorted(false);
-            if (elementName === "" || elementValue === "") {
-              setShowWarning(true);
-              return;
-            }
-            setShowWarning(false);
-            setElementName("");
-            setElementType("");
-            setElementValue("");
-            setElements([
-              ...elements.filter((el) => el.name !== "H₂O - woda"),
-              {
-                name: elementName,
-                type: elementType,
-                subType: elementValue,
-              },
-            ]);
-          }}
+          onClick={() => addElement()}
         />
       </div>
       <Input
         text
-        value={elementName}
-        setValue={setElementName}
+        value={elementTitle}
+        setValue={setElementTitle}
         title="Nazwa środka"
         placeholder="Podaj nazwę środka"
       />

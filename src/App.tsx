@@ -4,58 +4,48 @@ import Section from "./components/Section.tsx";
 import ShowElement from "./components/ShowElement.tsx";
 import { order } from "./components/data.ts";
 import { useEffect, useState } from "react";
+import type { Element as ElementType } from "./types/types.ts";
 export default function App() {
   const [isReset, setIsReset] = useState(false);
   const [hasSorted, setHasSorted] = useState(false);
-  const [elements, setElements] = useState<
-    {
-      name: string;
-      type: string;
-      subType: string;
-      alert1?: string;
-      alert2?: string;
-      alert3?: string;
-      alert4?: string;
-    }[]
-  >([]);
+  const [elements, setElements] = useState<ElementType[]>([]);
 
   useEffect(() => {
     setElements([]);
     setIsReset(false);
   }, [isReset]);
 
-  const woda = {
-    name: "H₂O - woda",
+  const water = {
+    title: "H₂O - woda",
     type: "",
-    subType: "",
+    name: "",
     alert1: "najlepiej ogrzana",
+    alert2: "",
+    alert3: "",
+    alert4: "",
+    alert5: "",
   };
 
-  useEffect(() => {
-    elements.forEach((el) => {
-      // const o = order.at(0);
-      // console.log(o);
-      // console.log(
-      //   "Order: ",
-      //   o?.symbol !== "-" ? o?.symbol + " " : "" + o?.subType
-      // );
-      console.log(el.subType);
-      // const found = order.find(
-      //   (o) =>
-      //     (o.symbol !== "-" ? o.symbol + " " : "") + o.subType === el.subType
-      // );
-      // console.log("Order: ", order.at(2));
-      // console.log("Found: ", found);
+  function orderElements() {
+    setHasSorted(true);
+    const sortReference = order.map((el) => el.type + el.name);
 
-      // if (found) {
-      //   el.alert1 = found.alert1;
-      //   el.alert2 = found.alert2;
-      //   el.alert3 = found.alert3;
-      //   el.alert4 = found.alert4;
-      // }
-      // console.log(found);
+    const sorted = [...elements].sort((a, b) => {
+      const aIndex = sortReference.indexOf(a.type + a.name);
+      const bIndex = sortReference.indexOf(b.type + b.name);
+      return (
+        (aIndex === -1 ? Infinity : aIndex) -
+        (bIndex === -1 ? Infinity : bIndex)
+      );
     });
-  }, [elements]);
+
+    if (elements.length === 0) return;
+    setElements([
+      water,
+      ...sorted.filter((el) => el.title !== "H₂O - woda"),
+      water,
+    ]);
+  }
 
   return (
     <div className="w-full min-h-screen h-full text-[var(--detail-color)] flex items-center flex-col bg-[#E6FFE6] p-2">
@@ -74,29 +64,7 @@ export default function App() {
           />
           <button
             className="w-full mt-10 border-2 border-[var(--detail-color)] rounded-2xl p-2 text-xl font-semibold hover:bg-[var(--detail-color)] hover:text-[var(--bg-color)] transition-colors"
-            onClick={() => {
-              const sortReference = order.map(
-                (el) =>
-                  el.type + (el.symbol !== "-" ? el.symbol + " " : "") + el.name
-              );
-
-              const sorted = [...elements].sort((a, b) => {
-                const aIndex = sortReference.indexOf(a.type + a.subType);
-                const bIndex = sortReference.indexOf(b.type + b.subType);
-                return (
-                  (aIndex === -1 ? Infinity : aIndex) -
-                  (bIndex === -1 ? Infinity : bIndex)
-                );
-              });
-
-              setHasSorted(true);
-              if (elements.length === 0) return;
-              setElements([
-                woda,
-                ...sorted.filter((el) => el.name !== "H₂O - woda"),
-                woda,
-              ]);
-            }}
+            onClick={() => orderElements()}
           >
             Pokaż kolejność
           </button>
