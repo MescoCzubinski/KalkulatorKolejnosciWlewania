@@ -1,5 +1,4 @@
 import Input from "./Input";
-import AddIcon from "../assets/add.svg";
 
 import type {
   Element as ElementType,
@@ -127,7 +126,7 @@ export default function AddElement({
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl text-nowrap font-semibold">Dodaj element</h1>
         <img
-          src={AddIcon}
+          src="/add.svg"
           alt="add element"
           className="w-12 cursor-pointer hover:shadow-[0_5_5px_var(--primary-color)] transition-shadow outline-0"
           onClick={() => addElement()}
