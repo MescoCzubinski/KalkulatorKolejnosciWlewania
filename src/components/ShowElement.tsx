@@ -1,4 +1,3 @@
-import deleteIcon from "../assets/delete.svg";
 // import { exclusions } from "./data.ts";
 import type {
   Element as ElementType,
@@ -53,7 +52,7 @@ export default function ShowElement({
           <p className="text-2xl font-semibold">{element.title}</p>
           {element.title !== "H₂O - woda" ? (
             <img
-              src={deleteIcon}
+              src="./delete.svg"
               alt="delete"
               className="w-12 cursor-pointer hover:shadow-[0_5_5px_var(--primary-color)] transition-shadow outline-0"
               onClick={() =>
