@@ -94,8 +94,6 @@ export default function AddElement({
   }
 
   function addElement() {
-    setHasSorted(false);
-
     if (elementTitle === "" || elementType === "" || elementValue === "") {
       setShowWarning(true);
       return;
@@ -116,6 +114,7 @@ export default function AddElement({
         alert5: alerts.alert5,
       },
     ]);
+    setHasSorted(false);
     setElementTitle("");
     setElementType("");
     setElementValue("");

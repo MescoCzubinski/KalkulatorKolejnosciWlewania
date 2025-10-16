@@ -1,4 +1,5 @@
-// import { exclusions } from "./data.ts";
+import { exclusions4, exclusions5 } from "./data.ts";
+import { useState, useEffect } from "react";
 import type {
   Element as ElementType,
   SetElements as SetElementsType,
@@ -14,6 +15,33 @@ export default function ShowElement({
   setElements: SetElementsType;
   index?: number;
 }) {
+  const [showAlert4, setShowAlert4] = useState(false);
+  const [showAlert5, setShowAlert5] = useState(false);
+
+  useEffect(() => {
+    if (exclusions4[element.name as keyof typeof exclusions4]) {
+      const exclusionIds =
+        exclusions4[element.name as keyof typeof exclusions4];
+      const hasExcludedElement = elements.some((el) =>
+        exclusionIds.includes(el.name)
+      );
+      setShowAlert4(hasExcludedElement);
+    } else {
+      setShowAlert4(false);
+    }
+
+    if (exclusions5[element.name as keyof typeof exclusions5]) {
+      const exclusionIds =
+        exclusions5[element.name as keyof typeof exclusions5];
+      const hasExcludedElement = elements.some((el) =>
+        exclusionIds.includes(el.name)
+      );
+      setShowAlert5(hasExcludedElement);
+    } else {
+      setShowAlert5(false);
+    }
+  }, [elements, element.name]);
+
   function alertColor(alert: string) {
     if (
       alert === "najlepiej ogrzana" ||
@@ -32,18 +60,6 @@ export default function ShowElement({
     return "text-red-500";
   }
 
-  // function show4Alert(element: ElementType) {
-  //   if (exclusions.includes(element.name)) {
-  //     exclusions[element.name].forEach((exclusion: string) => {
-  //       if (elements.find((el) => el.name === exclusion)) {
-  //         return true;
-  //       }
-  //     });
-  //   }
-  // }
-
-  // function show5Alert() {}
-
   return (
     <div className="flex flex-col gap-y-2 w-full p-4 border-2 border-[var(--primary-color)] rounded-2xl">
       <div className="flex w-full items-center justify-between gap-2">
@@ -55,9 +71,11 @@ export default function ShowElement({
               src="./delete.svg"
               alt="delete"
               className="w-12 cursor-pointer hover:shadow-[0_5_5px_var(--primary-color)] transition-shadow outline-0"
-              onClick={() =>
-                setElements(elements.filter((el) => el.title !== element.title))
-              }
+              onClick={() => {
+                setElements(
+                  elements.filter((el) => el.title !== element.title)
+                );
+              }}
             />
           ) : (
             <div></div>
@@ -83,12 +101,12 @@ export default function ShowElement({
           {element.alert3}
         </p>
       )}
-      {element.alert4 && (
+      {showAlert4 && element.alert4 && (
         <p className={`text-xl ${alertColor(element.alert4)}`}>
           {element.alert4}
         </p>
       )}
-      {element.alert5 && (
+      {showAlert5 && element.alert5 && (
         <p className={`text-xl ${alertColor(element.alert5)}`}>
           {element.alert5}
         </p>
