@@ -18,11 +18,15 @@ export default function AddElement({
   elements,
   setElements,
   isReset,
+  sortElementsTrigger,
+  setSortElementsTrigger,
   setHasSorted,
 }: {
   elements: ElementType[];
   setElements: SetElementsType;
   isReset: boolean;
+  sortElementsTrigger: boolean;
+  setSortElementsTrigger: (value: boolean) => void;
   setHasSorted: (hasSorted: boolean) => void;
 }) {
   const [elementTitle, setElementTitle] = useState("");
@@ -120,6 +124,13 @@ export default function AddElement({
     setElementValue("");
     setShowWarning(false);
   }
+
+  useEffect(() => {
+    addElement();
+    setSortElementsTrigger(false);
+    setShowWarning(false);
+  }, [sortElementsTrigger]);
+
   return (
     <div className="border-2 border-[var(--detail-color)] rounded-2xl p-4">
       <div className="flex items-center justify-between mb-4">

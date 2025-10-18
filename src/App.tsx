@@ -8,6 +8,7 @@ import type { Element as ElementType } from "./types/types.ts";
 export default function App() {
   const [isReset, setIsReset] = useState(false);
   const [hasSorted, setHasSorted] = useState(false);
+  const [sortElementsTrigger, setSortElementsTrigger] = useState(false);
   const [elements, setElements] = useState<ElementType[]>([]);
 
   useEffect(() => {
@@ -15,10 +16,21 @@ export default function App() {
     setIsReset(false);
   }, [isReset]);
 
-  const water = {
+  const waterFirst = {
     title: "H₂O - woda",
     type: "",
-    name: "",
+    name: "do połowy objętości zbiornika",
+    alert1: "najlepiej ogrzana",
+    alert2: "",
+    alert3: "",
+    alert4: "",
+    alert5: "",
+  };
+
+  const waterLast = {
+    title: "H₂O - woda",
+    type: "",
+    name: "do pełnego zbiornika",
     alert1: "najlepiej ogrzana",
     alert2: "",
     alert3: "",
@@ -41,11 +53,17 @@ export default function App() {
 
     if (elements.length === 0) return;
     setElements([
-      water,
+      waterFirst,
       ...sorted.filter((el) => el.title !== "H₂O - woda"),
-      water,
+      waterLast,
     ]);
   }
+
+  useEffect(() => {
+    if (!sortElementsTrigger) {
+      orderElements();
+    }
+  }, [sortElementsTrigger]);
 
   return (
     <div className="w-full min-h-screen h-full text-[var(--detail-color)] flex items-center flex-col bg-[#E6FFE6] p-2">
@@ -57,6 +75,8 @@ export default function App() {
         />
         <Section title="" showTitleOnMobile={false}>
           <AddElement
+            sortElementsTrigger={sortElementsTrigger}
+            setSortElementsTrigger={setSortElementsTrigger}
             setHasSorted={setHasSorted}
             elements={elements}
             setElements={setElements}
@@ -64,7 +84,7 @@ export default function App() {
           />
           <button
             className="w-full mt-10 border-2 border-[var(--detail-color)] rounded-2xl p-2 text-xl font-semibold hover:bg-[var(--detail-color)] hover:text-[var(--bg-color)] transition-colors"
-            onClick={() => orderElements()}
+            onClick={() => setSortElementsTrigger(true)}
           >
             Pokaż kolejność
           </button>
